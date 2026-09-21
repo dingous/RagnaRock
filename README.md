@@ -72,17 +72,17 @@ O caminho padrão do Editor está no script; use `-UnityPath` para outro local. 
 
 ## GitHub
 
-O pacote inclui código e um histórico Git local separado em `RagnaRock.bundle`. **A criação remota não foi concluída nesta entrega:** o conector reconheceu a conta `dingous`, mas não oferece criação de repositório, e a sessão do navegador pediu login.
-
-Para criar **dingous/RagnaRock privado** e enviar `master`, instale Git e GitHub CLI, revise o script e execute na raiz extraída:
+O projeto foi enviado ao repositório **dingous/RagnaRock**, criado pelo proprietário. A visibilidade **pública** foi mantida. As branches `master` e `main` receberam o projeto completo; o trabalho do jogo usa `master`.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\Tools\Publish-GitHub.ps1
+git clone -b master https://github.com/dingous/RagnaRock.git
 ```
 
-O script autentica pelo fluxo do GitHub CLI, confirma a conta `dingous`, recusa repositório remoto já existente e nunca usa force-push. Não precisa colocar senha ou token em arquivos. Uma falha não equivale a criação bem-sucedida; o script imprime a confirmação do GitHub somente ao terminar.
+O commit de importação `0d8c0d11ecf652a1acab6ab9da521a70b491af9e` contém os **87 arquivos originais**, sem alteração de conteúdo. Sua árvore Git `16d2a09864a9994440fcba01bff00f12504c5288` coincide com a do pacote entregue. Uma atualização documental posterior registra o envio sem mudar os scripts do jogo.
 
-Para restaurar o Git local a partir do bundle, use `git clone RagnaRock.bundle RagnaRock` em uma pasta vazia. A restauração cria um remote local; remova somente esse remote local antes de usar o publicador, após conferir `git remote -v`.
+O workflow **Source integrity and core rules**, execução **35635548831**, passou no GitHub: verificação estrutural e compilação/execução do harness C# em .NET 8. Isso não executa o Unity nem homologa a versão para produção.
+
+Não execute `Tools/Publish-GitHub.ps1` neste repositório: esse script foi preparado antes da criação remota e recusa um repositório já existente. O arquivo `RagnaRock.bundle`, entregue separadamente, preserva o histórico local original; o GitHub recebeu uma importação do seu conteúdo, não a reprodução desse histórico.
 
 ## Estrutura
 

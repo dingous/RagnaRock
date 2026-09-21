@@ -2,13 +2,13 @@
 
 ## Resultado
 
-Projeto Unity e repositório **local** RagnaRock, branch `master`, versão de desenvolvimento **0.1.0**. O projeto contém implementação em C#, cena de entrada, metadados, shaders, campanha, testes e ferramentas. Não há executável Unity incluído nem autorização para considerar esta entrega homologada para produção.
+Projeto Unity RagnaRock, versão de desenvolvimento **0.1.0**, enviado a **dingous/RagnaRock**, nas branches `master` e `main`. A visibilidade pública escolhida pelo proprietário foi mantida. O projeto contém implementação em C#, cena de entrada, metadados, shaders, campanha, testes e ferramentas. Não há executável Unity incluído nem autorização para considerar esta entrega homologada para produção.
 
 ## Implementado em código
 
 Câmera 3D superior oblíqua; quatro integrantes fixos; ataque automático com quatro instrumentos; prioridade por clique; coleta de itens; XP e escolhas de melhorias; evolução visual; ondas progressivas; 18 atos/54 ondas; encontros de chefe; vida do palco; fúria/Muralha de Som; vitória/derrota; menus; opções; movimento reduzido; checkpoint versionado com checksum/backup; referências culturais nominais e cenográficas; meshes/sons originais produzidos proceduralmente.
 
-## Executado neste ambiente
+## Executado na preparação local
 
 - Inspeção dos arquivos e revisão manual de fluxos, limites de pools e persistência.
 - Verificação estrutural automatizada de arquivos/JSON/XML, referências GUID, metadados únicos, vinculação da cena, referências de assemblies, nomes de componentes MonoBehaviour, delimitadores e um padrão de erro C# conhecido.
@@ -17,19 +17,25 @@ Câmera 3D superior oblíqua; quatro integrantes fixos; ataque automático com q
 
 O resultado detalhado do validador está em `structural-validation.json`. **Esse PASS não é compilação C#, execução dos 21 testes Unity nem homologação do jogo.**
 
-## Preparado, mas NÃO executado aqui
+## Executado no GitHub após o envio
 
-- Harness .NET que compila e testa as regras C# reais. O SDK .NET não estava disponível neste ambiente; as tentativas de obtê-lo não concluíram.
+- Importação dos 87 arquivos originais no commit `0d8c0d11ecf652a1acab6ab9da521a70b491af9e`.
+- Conferência da árvore Git remota: `16d2a09864a9994440fcba01bff00f12504c5288`, idêntica à árvore do pacote original.
+- Workflow **Source integrity and core rules**, execução **35635548831**, job **106451964559**: resultado **success**. Verificação estrutural e compilação/execução do harness C# em .NET 8 aprovadas.
+
+O harness valida as regras independentes do motor. Não valida APIs Unity, cena, shaders, áudio, interface ou build do jogo. O relatório `structural-validation.json` preserva a execução estrutural da entrega inicial; sua lista de atividades não executadas pertence àquela execução, não ao resultado posterior do GitHub.
+
+## Preparado, mas ainda NÃO validado
 - 15 testes EditMode e 6 PlayMode. Unity Editor/licença não estavam disponíveis neste ambiente.
 - Importação dos pacotes e da cena no Unity; compilação dos shaders; inspeção visual/sonora no motor.
 - Build Windows, teste fora do Editor, performance, memória, acessibilidade, balanceamento e campanha completa.
-- Workflows remotos de CI; exigem repositório remoto criado. O workflow Unity é manual e exige runner Windows licenciado.
+- Workflow Unity: é manual e exige runner Windows licenciado; não foi executado.
 
-## GitHub — pendência real
+## GitHub — envio concluído
 
-O conector identificou a conta `dingous`, mas não disponibilizou uma ação de criação de repositório. A tentativa pelo navegador retornou **login_required**. Portanto **não foi criado `dingous/RagnaRock` no GitHub e nada foi enviado à master remota**.
+O usuário criou `dingous/RagnaRock`, e a integração autenticada enviou o conteúdo completo. As branches `master` e `main` receberam o mesmo commit, sem force-push. A criação inicial pela assistência tinha sido bloqueada por login; essa pendência foi resolvida pela criação feita pelo proprietário.
 
-`Tools/Publish-GitHub.ps1` foi incluído para completar a criação privada com GitHub CLI autenticado na máquina do usuário. O script não foi executado neste ambiente; recusa repositório existente e nunca faz force-push. O `.bundle` entregue restaura o histórico local sem depender do GitHub.
+`Tools/Publish-GitHub.ps1` permanece como ferramenta da entrega inicial e não deve ser executado para este repositório já criado. O `.bundle` entregue preserva o histórico local original. A importação no GitHub preserva o conteúdo, mas possui seu próprio histórico de commits.
 
 ## Limitações de conteúdo e produção
 
