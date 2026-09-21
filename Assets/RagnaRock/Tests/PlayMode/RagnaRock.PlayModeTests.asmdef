@@ -1,0 +1,12 @@
+{
+  "name": "RagnaRock.PlayModeTests",
+  "rootNamespace": "RagnaRock.Tests",
+  "references": [
+    "RagnaRock.Core",
+    "RagnaRock.Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "autoReferenced": false
+}

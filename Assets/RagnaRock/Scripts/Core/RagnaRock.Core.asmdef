@@ -1,0 +1,7 @@
+{
+  "name": "RagnaRock.Core",
+  "rootNamespace": "RagnaRock.Core",
+  "references": [],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}

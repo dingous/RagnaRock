@@ -1,0 +1,6 @@
+{
+  "name": "RagnaRock.Runtime",
+  "rootNamespace": "RagnaRock",
+  "references": ["RagnaRock.Core", "Unity.ugui"],
+  "autoReferenced": true
+}

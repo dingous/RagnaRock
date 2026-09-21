@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!129 &1
+PlayerSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 28
+  companyName: Dingous
+  productName: RagnaRock
+  bundleVersion: 0.1.0
+  defaultScreenWidth: 1920
+  defaultScreenHeight: 1080
+  defaultScreenWidthWeb: 1280
+  defaultScreenHeightWeb: 720
+  m_ActiveColorSpace: 1
+  usePlayerLog: 1
+  runInBackground: 0
+  resizableWindow: 1
+  allowFullscreenSwitch: 1
+  fullscreenMode: 1
+  forceSingleInstance: 1
+  activeInputHandler: 0
+  gcIncremental: 1
+  allowUnsafeCode: 0
+  stripEngineCode: 0
+  applicationIdentifier:
+    Standalone: com.dingous.ragnarock
+  scriptingBackend:
+    Standalone: 0
+  managedStrippingLevel:
+    Standalone: 0

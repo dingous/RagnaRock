@@ -1,0 +1,35 @@
+name: Unity validation (licensed local runner)
+on:
+  workflow_dispatch:
+    inputs:
+      build:
+        description: Also build Windows after tests
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  unity:
+    # Opt-in only. Requires your Windows runner with this label and licensed Unity installed.
+    # Never trigger self-hosted execution automatically from pull requests.
+    runs-on: [self-hosted, Windows, X64, ragnarock-unity]
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test and optionally build
+        shell: pwsh
+        env:
+          BUILD_REQUESTED: ${{ inputs.build }}
+        run: |
+          if ($env:BUILD_REQUESTED -eq 'true') { ./Tools/Run-UnityChecks.ps1 -Build }
+          else { ./Tools/Run-UnityChecks.ps1 }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-test-results
+          path: TestResults/
+      - uses: actions/upload-artifact@v4
+        if: success() && inputs.build
+        with:
+          name: ragnarock-windows-development
+          path: Builds/Windows/

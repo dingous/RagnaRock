@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>disable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Assets/RagnaRock/Scripts/Core/GameRules.cs" Link="GameRules.cs" />
+    <None Include="../../Assets/RagnaRock/Resources/Campaign.json" Link="Campaign.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

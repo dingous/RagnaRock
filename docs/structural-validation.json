@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "structural_checks": 458,
+  "csharp_files": 18,
+  "csharp_lines": 2818,
+  "unity_test_cases_authored": 21,
+  "acts": 18,
+  "waves": 54,
+  "errors": [],
+  "not_executed": [
+    "C# compilation",
+    "Unity import",
+    "Unity EditMode/PlayMode",
+    "shader compilation",
+    "gameplay/render/audio inspection",
+    "Windows build",
+    "remote GitHub workflows"
+  ]
+}

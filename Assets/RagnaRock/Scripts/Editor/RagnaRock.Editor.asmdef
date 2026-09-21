@@ -1,0 +1,7 @@
+{
+  "name": "RagnaRock.Editor",
+  "rootNamespace": "RagnaRock.Editor",
+  "references": ["RagnaRock.Core", "RagnaRock.Runtime"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}
