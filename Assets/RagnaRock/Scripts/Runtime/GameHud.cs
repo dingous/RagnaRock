@@ -82,7 +82,7 @@ namespace RagnaRock
                 var card=ui.Image(hudRoot.transform,"Musician "+i,UiKit.Panel,V(.015f+i*.193f,.023f),V(.198f+i*.193f,.151f));
                 ui.Image(card.transform,"Signature color",StageArt.MemberColors[i],V(.025f,.15f),V(.037f,.85f),false);
                 ui.Label(card.transform,"Name",StageArt.MemberNames[i],24,StageArt.MemberColors[i],V(.075f,.54f),V(.95f,.94f),TextAnchor.MiddleLeft,FontStyle.Bold);
-                ui.Label(card.transform,"Role",roles[i],13,UiKit.Muted,V(.075f,.35f),V(.96f,.58f));
+                ui.Label(card.transform,"Role",StageArt.MemberStyles[i]+"\n"+roles[i],12,UiKit.Muted,V(.075f,.29f),V(.96f,.59f));
                 memberTexts[i]=ui.Label(card.transform,"Weapon tier","",16,UiKit.TextColor,V(.075f,.14f),V(.95f,.36f));
                 memberBars[i]=ui.Bar(card.transform,"Instrument rank",StageArt.MemberColors[i],V(.075f,.075f),V(.925f,.105f));
             }
@@ -94,7 +94,7 @@ namespace RagnaRock
             var menu=ui.Image(menuRoot.transform,"Menu column",new Color(.035f,.055f,.085f,.96f),V(.05f,.085f),V(.427f,.92f));
             ui.Label(menu.transform,"Eyebrow","SOBREVIVA AO SILÊNCIO",20,UiKit.Gold,V(.065f,.845f),V(.95f,.91f),TextAnchor.MiddleLeft,FontStyle.Bold);
             ui.Label(menu.transform,"Logo","RAGNA\nROCK",88,UiKit.TextColor,V(.055f,.60f),V(.96f,.847f),TextAnchor.MiddleLeft,FontStyle.Bold);
-            ui.Label(menu.transform,"Pitch","Quatro músicos. Um palco.\nUma turnê pelo peso do metal.",25,UiKit.Muted,V(.065f,.465f),V(.94f,.60f));
+            ui.Label(menu.transform,"Pitch","Quatro músicos. Um palco.\nGlam, clássico, death e black metal contra o silêncio.",23,UiKit.Muted,V(.065f,.455f),V(.94f,.60f));
             ui.Button(menu.transform,"New run","COMEÇAR UM NOVO SHOW",V(.065f,.34f),V(.935f,.433f),RequestNewRun,new Color(.48f,.27f,.16f),23);
             continueButton=ui.Button(menu.transform,"Continue","CONTINUAR CHECKPOINT",V(.065f,.232f),V(.935f,.325f),()=>game.ContinueRun(),UiKit.Panel,22);
             ui.Button(menu.transform,"Archive","ARQUIVO DO METAL",V(.065f,.141f),V(.62f,.214f),ShowCodex,UiKit.Ink,18);
@@ -226,7 +226,7 @@ namespace RagnaRock
                 case RunMode.Intermission:
                     breakRoot.SetActive(true);intermissionTitle.text=game.Chapter.title;
                     intermissionThreat.text="ONDA "+game.Wave.Number+" / "+game.Campaign.TotalWaves+(game.Wave.HasBoss?"  •  CHEFE DO ATO":"  •  "+game.Chapter.style);
-                    intermissionBody.text=game.WaveIndex==0?"Os quatro músicos defendem o palco sem se mover.\nClique em inimigos para focar. Os itens são coletados pelo drone.\nAo completar a fúria, use ESPAÇO para atacar e proteger a banda.":game.Chapter.lore;
+                    intermissionBody.text=game.WaveIndex==0?"Roxy Vane, Jack Iron, Morten Graves e Varg Nocturne defendem o palco sem se mover.\nClique em inimigos para focar. Os itens são coletados pelo drone.\nAo completar a fúria, use ESPAÇO para atacar e proteger a banda.":game.Chapter.lore;
                     break;
                 case RunMode.Upgrade:
                     upgradeRoot.SetActive(true);upgradeTitle.text="AUMENTE O VOLUME";
@@ -354,10 +354,10 @@ namespace RagnaRock
         {
             switch(kind)
             {
-                case UpgradeKind.Voice:return next==8?"Evolução final: explosão vocal em 360°. Mais dano e frequência.":next==4?"Ressonância: repulsão mais forte. O cone cresce, com mais dano e frequência.":"Mais dano, alcance do cone e frequência para Nyx.";
-                case UpgradeKind.Guitar:return next==8?"Evolução final: ignora blindagem e explode em eletricidade ao atingir o alvo.":next==4?"Ressonância: o riff atravessa três inimigos. Mais dano e frequência.":"Mais dano e frequência. A cada dois níveis, perfura mais um inimigo.";
-                case UpgradeKind.Bass:return next==8?"Evolução final: repulsão pesada e lentidão em área. O palco ganha espaço.":next==4?"Ressonância: inimigos atingidos ficam mais lentos. Mais pressão e frequência.":"Mais dano, alcance e frequência para a onda de pressão de Atlas.";
-                case UpgradeKind.Drums:return next==8?"Evolução final: três bombas, lentidão e repulsão nas explosões.":next==4?"Ressonância: duas bombas por batida. Mais dano e área de explosão.":"Mais dano, frequência e área para as bombas rítmicas de Knox.";
+                case UpgradeKind.Voice:return next==8?"Roxy Vane: explosão vocal glam em 360°. Mais dano e frequência.":next==4?"Roxy Vane entra em ressonância: repulsão mais forte e cone maior.":"Mais dano, alcance do cone e frequência para Roxy Vane.";
+                case UpgradeKind.Guitar:return next==8?"Jack Iron: Flying V no limite, ignora blindagem e explode em eletricidade.":next==4?"Jack Iron entra em ressonância: o riff atravessa três inimigos.":"Mais dano e frequência para Jack Iron. A cada dois níveis, perfura mais um inimigo.";
+                case UpgradeKind.Bass:return next==8?"Morten Graves: repulsão brutal e lentidão em área. O palco ganha espaço.":next==4?"Morten Graves entra em ressonância: pressão mais pesada e lentidão.":"Mais dano, alcance e frequência para a onda de pressão de Morten Graves.";
+                case UpgradeKind.Drums:return next==8?"Varg Nocturne: três bombas sombrias, lentidão e repulsão nas explosões.":next==4?"Varg Nocturne entra em ressonância: duas bombas por batida.":"Mais dano, frequência e área para as bombas rítmicas de Varg Nocturne.";
                 case UpgradeKind.Amplifier:return "+14% de dano-base para os quatro instrumentos por nível.";
                 case UpgradeKind.Tempo:return "+8,5% de frequência-base de ataque para toda a banda por nível.";
                 case UpgradeKind.Range:return "+0,9 metro de alcance de ataque para os quatro músicos.";
