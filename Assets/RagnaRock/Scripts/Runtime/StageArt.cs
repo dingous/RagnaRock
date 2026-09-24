@@ -34,9 +34,12 @@ namespace RagnaRock
 
     public sealed class StageArt : IDisposable
     {
+        // Identity follows the four visual archetypes approved for the band while preserving
+        // the existing combat roles: Voice, Guitar, Bass and Drums.
         public static readonly Color[] MemberColors = {
-            new Color(.80f,.44f,1f), new Color(.25f,.87f,1f), new Color(1f,.34f,.33f), new Color(1f,.75f,.26f) };
-        public static readonly string[] MemberNames = { "NYX", "RAVEN", "ATLAS", "KNOX" };
+            Hex("#B84DFF"), Hex("#D28A45"), Hex("#B7353D"), Hex("#9AA8BA") };
+        public static readonly string[] MemberNames = { "ROXY VANE", "JACK IRON", "MORTEN GRAVES", "VARG NOCTURNE" };
+        public static readonly string[] MemberStyles = { "GLAM METAL", "METAL CLÁSSICO", "DEATH METAL", "BLACK METAL" };
         public readonly Transform Root;
         public readonly Camera Camera;
         public readonly MusicianRig[] Band = new MusicianRig[4];
@@ -314,80 +317,198 @@ namespace RagnaRock
         }
         private MusicianRig Musician(BandRole role,Vector3 position)
         {
-            int index=(int)role; Color accent=MemberColors[index];
-            var root=new GameObject(MemberNames[index]+" • "+role).transform;root.SetParent(Root,false);root.localPosition=position;
-            root.localRotation=Quaternion.Euler(0,180,0);
-            var body=new MeshCraft(); float wide=role==BandRole.Bass?1.17f:1f;
-            Color skin=index==2?Hex("#9F7058"):index==1?Hex("#D6A580"):Hex("#BC947C");
-            body.Box(new Vector3(0,1.08f,0),new Vector3(.64f*wide,.72f,.38f),Dark);
-            body.Box(new Vector3(0,.77f,-.01f),new Vector3(.65f*wide,.14f,.42f),Steel);
-            body.Box(new Vector3(0,.79f,.225f),new Vector3(.18f,.1f,.04f),accent);
+            int index=(int)role;
+            Color accent=MemberColors[index];
+            bool roxy=role==BandRole.Voice;
+            bool jack=role==BandRole.Guitar;
+            bool morten=role==BandRole.Bass;
+            bool varg=role==BandRole.Drums;
+
+            var root=new GameObject(MemberNames[index]+" • "+MemberStyles[index]+" • "+role).transform;
+            root.SetParent(Root,false);root.localPosition=position;root.localRotation=Quaternion.Euler(0,180,0);
+
+            // Distinct silhouettes make every musician readable at gameplay distance.
+            float torsoWidth=roxy?.57f:morten?.78f:varg?.64f:.67f;
+            Color skin=varg?Hex("#E3E2DE"):morten?Hex("#A76E52"):jack?Hex("#C08E72"):Hex("#C69077");
+            Color leather=Hex("#11141A");
+            Color cloth=Hex("#252A33");
+            var body=new MeshCraft();
+
+            body.Box(new Vector3(0,1.08f,0),new Vector3(torsoWidth,.72f,.38f),leather);
+            body.Box(new Vector3(0,.77f,-.01f),new Vector3(torsoWidth+.02f,.14f,.42f),Steel);
+            body.Box(new Vector3(0,.79f,.225f),new Vector3(.19f,.105f,.04f),accent);
+
+            // Jacket lapels / vest identity.
+            body.Box(new Vector3(-.12f,1.15f,.215f),new Vector3(.12f,.48f,.035f),jack?Hex("#2D3138"):accent*.48f,Quaternion.Euler(0,0,-12));
+            body.Box(new Vector3(.12f,1.15f,.215f),new Vector3(.12f,.48f,.035f),jack?Hex("#2D3138"):accent*.48f,Quaternion.Euler(0,0,12));
+
             for(int s=-1;s<=1;s+=2)
             {
-                body.Box(new Vector3(s*.19f,.4f,0),new Vector3(.23f,.69f,.24f),Hex("#29313E"),Quaternion.Euler(0,0,s*-5));
-                body.Box(new Vector3(s*.23f,.085f,.11f),new Vector3(.29f,.18f,.48f),Dark);
+                Color trousers=roxy?(s<0?Hex("#4E2478"):leather):cloth;
+                body.Box(new Vector3(s*.19f,.4f,0),new Vector3(morten?.27f:.23f,.69f,.24f),trousers,Quaternion.Euler(0,0,s*-5));
+                body.Box(new Vector3(s*.23f,.085f,.11f),new Vector3(morten?.32f:.29f,.18f,.48f),leather);
                 body.Box(new Vector3(s*.3f,1.2f,.23f),new Vector3(.07f,.35f,.04f),accent);
-                for(int stud=0;stud<3;stud++)body.Octahedron(new Vector3(s*(.27f+stud*.06f),1.47f,0),new Vector3(.05f,.1f,.05f),Bone);
+                for(int stud=0;stud<3;stud++)
+                    body.Octahedron(new Vector3(s*(.27f+stud*.06f),1.47f,0),new Vector3(.045f,.08f,.045f),Bone);
             }
-            body.Box(new Vector3(0,1.24f,.202f),new Vector3(.3f,.26f,.025f),accent*.6f);
-            Make("Leather jacket and boots",body,root);
-            var headRoot=new GameObject("Headbang pivot").transform;headRoot.SetParent(root,false);headRoot.localPosition=new Vector3(0,1.55f,0);
+
+            // Individual costume signatures from the approved concepts.
+            if(roxy)
+            {
+                body.Box(new Vector3(-.30f,.70f,.18f),new Vector3(.08f,.86f,.05f),Hex("#D22542"),Quaternion.Euler(0,0,-6));
+                body.Box(new Vector3(.29f,.56f,.19f),new Vector3(.075f,.72f,.05f),Hex("#EEE0C6"),Quaternion.Euler(0,0,7));
+                for(int i=0;i<5;i++)
+                    body.Box(new Vector3(.25f+(i%2)*.045f,.28f+i*.11f,.142f),new Vector3(.038f,.035f,.02f),i%2==0?Dark:Hex("#C7A78A"));
+            }
+            else if(jack)
+            {
+                body.Box(new Vector3(-.19f,1.22f,.235f),new Vector3(.18f,.13f,.025f),Hex("#8D322B"));
+                body.Box(new Vector3(.20f,1.03f,.235f),new Vector3(.16f,.11f,.025f),Hex("#C8B177"));
+                for(int i=0;i<6;i++)
+                    body.Octahedron(new Vector3(-.34f+i*.055f,.70f,.225f),new Vector3(.025f,.025f,.018f),Steel);
+            }
+            else if(morten)
+            {
+                body.Box(new Vector3(-.20f,1.26f,.235f),new Vector3(.18f,.14f,.025f),Hex("#D8D1C0"));
+                body.Box(new Vector3(.20f,1.10f,.235f),new Vector3(.18f,.14f,.025f),Hex("#6F2025"));
+                body.Box(new Vector3(0,.96f,.238f),new Vector3(.15f,.12f,.025f),Hex("#C4B894"));
+            }
+            else if(varg)
+            {
+                for(int strip=-2;strip<=2;strip++)
+                    body.Box(new Vector3(strip*.12f,.68f,-.15f),new Vector3(.075f,1.15f,.07f),Hex("#0A0C10"),Quaternion.Euler(0,0,strip*3));
+                for(int s=-1;s<=1;s+=2)
+                    body.Cone(new Vector3(s*.42f,1.40f,-.03f),.10f,.38f,Steel,4,Quaternion.Euler(0,0,s*-58));
+            }
+            Make("Signature leather, vest and stagewear • "+MemberStyles[index],body,root);
+
+            var headRoot=new GameObject("Headbang pivot • "+MemberNames[index]).transform;
+            headRoot.SetParent(root,false);headRoot.localPosition=new Vector3(0,1.55f,0);
             var headMesh=new MeshCraft();
             headMesh.Box(new Vector3(0,.19f,0),new Vector3(.4f,.44f,.36f),skin);
-            headMesh.Box(new Vector3(0,.43f,-.04f),new Vector3(.46f,.17f,.43f),index==1?accent*.48f:Hex("#151823"));
-            headMesh.Box(new Vector3(0,.11f,-.21f),new Vector3(.45f,.64f,.13f),index==1?accent*.45f:Hex("#151823"));
-            for(int s=-1;s<=1;s+=2)
+
+            if(roxy)
             {
-                headMesh.Box(new Vector3(s*.12f,.25f,.191f),new Vector3(.11f,.055f,.025f),Dark);
-                headMesh.Box(new Vector3(s*.23f,.12f,0),new Vector3(.09f,.57f,.34f),index==1?accent*.45f:Dark);
+                // Platinum teased glam hair, purple bandana and stage make-up.
+                Color blonde=Hex("#E8D9AD");
+                headMesh.Box(new Vector3(0,.49f,-.04f),new Vector3(.57f,.22f,.48f),blonde);
+                headMesh.Box(new Vector3(-.28f,.17f,-.02f),new Vector3(.17f,.78f,.39f),blonde,Quaternion.Euler(0,0,-8));
+                headMesh.Box(new Vector3(.28f,.17f,-.02f),new Vector3(.17f,.78f,.39f),blonde,Quaternion.Euler(0,0,8));
+                for(int i=0;i<5;i++)
+                    headMesh.Octahedron(new Vector3(-.28f+i*.14f,.56f+(i%2)*.06f,-.04f),new Vector3(.13f,.17f,.13f),blonde);
+                headMesh.Box(new Vector3(0,.39f,.205f),new Vector3(.46f,.075f,.035f),accent);
+                for(int s=-1;s<=1;s+=2)
+                    headMesh.Box(new Vector3(s*.12f,.245f,.194f),new Vector3(.12f,.035f,.025f),Hex("#342040"));
+                headMesh.Box(new Vector3(0,.08f,.19f),new Vector3(.18f,.045f,.025f),Hex("#B63862"));
             }
-            headMesh.Box(new Vector3(0,.035f,.17f),new Vector3(.23f,.14f,.08f),index==2?Dark:skin);
-            if(index==1)for(int i=0;i<4;i++)headMesh.Cone(new Vector3(0,.48f,-.15f+i*.09f),.09f,.27f,accent,4);
-            Make("Original face and hair",headMesh,headRoot);
+            else if(jack)
+            {
+                Color hair=Hex("#15161A");
+                headMesh.Box(new Vector3(0,.45f,-.05f),new Vector3(.48f,.18f,.43f),hair);
+                headMesh.Box(new Vector3(-.24f,.12f,-.03f),new Vector3(.15f,.82f,.36f),hair,Quaternion.Euler(0,0,-4));
+                headMesh.Box(new Vector3(.24f,.12f,-.03f),new Vector3(.15f,.82f,.36f),hair,Quaternion.Euler(0,0,4));
+                headMesh.Box(new Vector3(0,.015f,.17f),new Vector3(.28f,.16f,.08f),Hex("#252126"));
+                for(int s=-1;s<=1;s+=2)
+                    headMesh.Box(new Vector3(s*.12f,.25f,.191f),new Vector3(.11f,.05f,.025f),Dark);
+            }
+            else if(morten)
+            {
+                Color hair=Hex("#2B211E");
+                headMesh.Box(new Vector3(0,.45f,-.05f),new Vector3(.50f,.18f,.43f),hair);
+                headMesh.Box(new Vector3(-.25f,.10f,-.02f),new Vector3(.16f,.86f,.36f),hair);
+                headMesh.Box(new Vector3(.25f,.10f,-.02f),new Vector3(.16f,.86f,.36f),hair);
+                headMesh.Box(new Vector3(0,-.02f,.13f),new Vector3(.34f,.34f,.18f),hair);
+                headMesh.Box(new Vector3(0,-.18f,.11f),new Vector3(.28f,.22f,.16f),hair);
+                for(int s=-1;s<=1;s+=2)
+                    headMesh.Box(new Vector3(s*.12f,.25f,.191f),new Vector3(.11f,.05f,.025f),Dark);
+            }
+            else
+            {
+                // Black metal corpse paint: pale base, dark eyes and vertical paint tears.
+                Color hair=Hex("#090B0E");
+                headMesh.Box(new Vector3(0,.46f,-.05f),new Vector3(.48f,.17f,.43f),hair);
+                headMesh.Box(new Vector3(-.25f,.06f,-.03f),new Vector3(.15f,.94f,.38f),hair);
+                headMesh.Box(new Vector3(.25f,.06f,-.03f),new Vector3(.15f,.94f,.38f),hair);
+                for(int s=-1;s<=1;s+=2)
+                {
+                    headMesh.Box(new Vector3(s*.12f,.255f,.194f),new Vector3(.14f,.08f,.026f),Hex("#090A0C"));
+                    headMesh.Box(new Vector3(s*.12f,.14f,.195f),new Vector3(.045f,.20f,.027f),Hex("#090A0C"));
+                }
+                headMesh.Box(new Vector3(0,.065f,.19f),new Vector3(.18f,.06f,.027f),Hex("#0A0A0C"));
+            }
+            Make("Face, hair and make-up • "+MemberStyles[index],headMesh,headRoot);
+
             Transform[] arms=new Transform[2];
             for(int i=0;i<2;i++)
             {
                 int s=i==0?-1:1;
-                arms[i]=new GameObject(i==0?"Left arm":"Right arm").transform;arms[i].SetParent(root,false);
-                arms[i].localPosition=new Vector3(s*.4f,1.36f,0);
-                var arm=new MeshCraft();arm.Box(new Vector3(0,-.15f,0),new Vector3(.22f,.33f,.23f),Dark);
-                arm.Box(new Vector3(0,-.41f,.05f),new Vector3(.18f,.3f,.19f),skin);
+                arms[i]=new GameObject(i==0?"Left arm":"Right arm").transform;
+                arms[i].SetParent(root,false);arms[i].localPosition=new Vector3(s*(morten?.46f:.4f),1.36f,0);
+                var arm=new MeshCraft();
+                Color upper=morten?skin:leather;
+                arm.Box(new Vector3(0,-.15f,0),new Vector3(morten?.25f:.22f,.33f,.23f),upper);
+                arm.Box(new Vector3(0,-.41f,.05f),new Vector3(morten?.21f:.18f,.3f,.19f),skin);
                 arm.Box(new Vector3(0,-.45f,.06f),new Vector3(.20f,.11f,.21f),accent*.65f);
-                if(role==BandRole.Drums)arm.Box(new Vector3(0,-.56f,.27f),new Vector3(.035f,.035f,.5f),Bone);
-                Make("Arm",arm,arms[i]);
+                if(morten)
+                {
+                    arm.Box(new Vector3(0,-.19f,.122f),new Vector3(.055f,.18f,.018f),Dark,Quaternion.Euler(0,0,28));
+                    arm.Box(new Vector3(0,-.38f,.148f),new Vector3(.06f,.16f,.018f),Dark,Quaternion.Euler(0,0,-28));
+                }
+                if(varg)
+                    for(int stud=0;stud<3;stud++)arm.Cone(new Vector3((stud-1)*.055f,-.46f,.08f),.035f,.13f,Steel,4,Quaternion.Euler(90,0,0));
+                if(role==BandRole.Drums)
+                    arm.Box(new Vector3(0,-.56f,.27f),new Vector3(.035f,.035f,.52f),Bone);
+                Make("Arm • "+MemberStyles[index],arm,arms[i]);
             }
-            var instrument=new GameObject("Instrument").transform;instrument.SetParent(root,false);
+
+            var instrument=new GameObject("Instrument • "+MemberNames[index]).transform;
+            instrument.SetParent(root,false);
             var instrumentMesh=new MeshCraft();
-            if(role==BandRole.Guitar || role==BandRole.Bass)
+            if(jack)
             {
-                float stretch=role==BandRole.Bass?1.25f:1f;
+                // Classic-metal Flying-V silhouette.
                 instrument.localPosition=new Vector3(.05f,.91f,.4f);instrument.localRotation=Quaternion.Euler(0,0,-31);
-                instrumentMesh.Box(new Vector3(-.2f,-.07f,0),new Vector3(.32f,.52f,.15f),accent,Quaternion.Euler(0,0,-24));
-                instrumentMesh.Box(new Vector3(.15f,-.03f,0),new Vector3(.30f,.48f,.15f),accent,Quaternion.Euler(0,0,24));
-                instrumentMesh.Box(new Vector3(0,.44f,0),new Vector3(.12f,.98f*stretch,.095f),Hex("#A37B4A"));
-                instrumentMesh.Box(new Vector3(0,.87f*stretch,0),new Vector3(.21f,.3f,.12f),accent);
-                instrumentMesh.Box(new Vector3(0,0,.088f),new Vector3(.12f,.18f,.018f),Dark);
-                for(int k=0;k<4;k++)instrumentMesh.Box(new Vector3(-.03f+k*.02f,.39f,.063f),new Vector3(.006f,.85f,.006f),Bone);
-                for(int s=-1;s<=1;s+=2)for(int k=0;k<3;k++)instrumentMesh.Box(new Vector3(s*.13f,.78f*stretch+k*.07f,0),new Vector3(.08f,.035f,.04f),Steel);
+                instrumentMesh.Box(new Vector3(-.17f,-.18f,0),new Vector3(.20f,.78f,.15f),accent,Quaternion.Euler(0,0,-31));
+                instrumentMesh.Box(new Vector3(.17f,-.18f,0),new Vector3(.20f,.78f,.15f),accent,Quaternion.Euler(0,0,31));
+                instrumentMesh.Box(new Vector3(0,.43f,0),new Vector3(.12f,1.00f,.095f),Hex("#A37B4A"));
+                instrumentMesh.Box(new Vector3(0,.92f,0),new Vector3(.22f,.31f,.12f),Hex("#17191E"));
+                instrumentMesh.Box(new Vector3(0,.02f,.088f),new Vector3(.14f,.18f,.018f),Bone);
+                for(int k=0;k<6;k++)instrumentMesh.Box(new Vector3(-.04f+k*.016f,.44f,.063f),new Vector3(.005f,.88f,.006f),Bone);
             }
-            else if(role==BandRole.Voice)
+            else if(morten)
             {
+                instrument.localPosition=new Vector3(.05f,.91f,.4f);instrument.localRotation=Quaternion.Euler(0,0,-31);
+                instrumentMesh.Box(new Vector3(-.18f,-.06f,0),new Vector3(.33f,.52f,.16f),Hex("#332D2B"),Quaternion.Euler(0,0,-26));
+                instrumentMesh.Box(new Vector3(.17f,-.02f,0),new Vector3(.31f,.48f,.16f),Hex("#332D2B"),Quaternion.Euler(0,0,24));
+                for(int s=-1;s<=1;s+=2)instrumentMesh.Cone(new Vector3(s*.30f,-.22f,0),.11f,.42f,Hex("#76675A"),5,Quaternion.Euler(0,0,s*-48));
+                instrumentMesh.Box(new Vector3(0,.52f,0),new Vector3(.13f,1.24f,.10f),Hex("#6F4A33"));
+                instrumentMesh.Box(new Vector3(0,1.13f,0),new Vector3(.24f,.34f,.13f),Hex("#17191E"));
+                for(int k=0;k<4;k++)instrumentMesh.Box(new Vector3(-.03f+k*.02f,.50f,.066f),new Vector3(.006f,1.05f,.006f),Bone);
+            }
+            else if(roxy)
+            {
+                // Chrome microphone with purple head and long glam scarves.
                 instrumentMesh.Cylinder(new Vector3(.32f,.78f,.6f),.032f,1.55f,Steel,8);
                 instrumentMesh.Cylinder(new Vector3(.32f,.025f,.6f),.32f,.05f,Steel,12);
                 instrumentMesh.Cylinder(new Vector3(.32f,1.52f,.55f),.062f,.24f,accent,8,Quaternion.Euler(80,0,0));
                 instrumentMesh.Octahedron(new Vector3(.32f,1.53f,.69f),Vector3.one*.10f,Bone);
+                instrumentMesh.Box(new Vector3(.39f,.60f,.59f),new Vector3(.055f,1.10f,.035f),Hex("#7D2FA3"),Quaternion.Euler(0,0,-3));
+                instrumentMesh.Box(new Vector3(.47f,.52f,.59f),new Vector3(.045f,.95f,.035f),Hex("#C72D4B"),Quaternion.Euler(0,0,5));
             }
-            Make("Signature instrument",instrumentMesh,instrument);
+            Make("Signature instrument • "+MemberStyles[index],instrumentMesh,instrument);
+
             var evo=new Transform[2];
             for(int tier=0;tier<2;tier++)
             {
                 var m=new MeshCraft();
-                for(int s=-1;s<=1;s+=2)m.Cone(new Vector3(s*(.48f+tier*.15f),1.15f,-.15f),.15f,.65f+tier*.2f,accent,4,Quaternion.Euler(0,0,s*-42));
+                for(int s=-1;s<=1;s+=2)
+                    m.Cone(new Vector3(s*(.48f+tier*.15f),1.15f,-.15f),.15f,.65f+tier*.2f,accent,4,Quaternion.Euler(0,0,s*-42));
                 evo[tier]=Make(tier==0?"Evolution I • resonance fins":"Evolution II • ultimate rig",m,root,Glow).transform;
                 evo[tier].gameObject.SetActive(false);
             }
             return new MusicianRig{Root=root,Anchor=position,Head=headRoot,LeftArm=arms[0],RightArm=arms[1],Instrument=instrument,Evolution=evo,Role=role,Phase=index*1.7f};
         }
+
         private void Drums(Vector3 position)
         {
             var m=new MeshCraft();Color amber=MemberColors[3];
