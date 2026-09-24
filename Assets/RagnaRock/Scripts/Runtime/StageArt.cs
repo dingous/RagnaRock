@@ -328,7 +328,7 @@ namespace RagnaRock
             root.SetParent(Root,false);root.localPosition=position;root.localRotation=Quaternion.Euler(0,180,0);
 
             // Distinct silhouettes make every musician readable at gameplay distance.
-            float torsoWidth=roxy?.57f:morten?.78f:varg?.64f:.67f;
+            float torsoWidth=roxy ? .57f : morten ? .78f : varg ? .64f : .67f;
             Color skin=varg?Hex("#E3E2DE"):morten?Hex("#A76E52"):jack?Hex("#C08E72"):Hex("#C69077");
             Color leather=Hex("#11141A");
             Color cloth=Hex("#252A33");
@@ -345,8 +345,8 @@ namespace RagnaRock
             for(int s=-1;s<=1;s+=2)
             {
                 Color trousers=roxy?(s<0?Hex("#4E2478"):leather):cloth;
-                body.Box(new Vector3(s*.19f,.4f,0),new Vector3(morten?.27f:.23f,.69f,.24f),trousers,Quaternion.Euler(0,0,s*-5));
-                body.Box(new Vector3(s*.23f,.085f,.11f),new Vector3(morten?.32f:.29f,.18f,.48f),leather);
+                body.Box(new Vector3(s*.19f,.4f,0),new Vector3(morten ? .27f : .23f,.69f,.24f),trousers,Quaternion.Euler(0,0,s*-5));
+                body.Box(new Vector3(s*.23f,.085f,.11f),new Vector3(morten ? .32f : .29f,.18f,.48f),leather);
                 body.Box(new Vector3(s*.3f,1.2f,.23f),new Vector3(.07f,.35f,.04f),accent);
                 for(int stud=0;stud<3;stud++)
                     body.Octahedron(new Vector3(s*(.27f+stud*.06f),1.47f,0),new Vector3(.045f,.08f,.045f),Bone);
@@ -443,11 +443,11 @@ namespace RagnaRock
             {
                 int s=i==0?-1:1;
                 arms[i]=new GameObject(i==0?"Left arm":"Right arm").transform;
-                arms[i].SetParent(root,false);arms[i].localPosition=new Vector3(s*(morten?.46f:.4f),1.36f,0);
+                arms[i].SetParent(root,false);arms[i].localPosition=new Vector3(s*(morten ? .46f : .4f),1.36f,0);
                 var arm=new MeshCraft();
                 Color upper=morten?skin:leather;
-                arm.Box(new Vector3(0,-.15f,0),new Vector3(morten?.25f:.22f,.33f,.23f),upper);
-                arm.Box(new Vector3(0,-.41f,.05f),new Vector3(morten?.21f:.18f,.3f,.19f),skin);
+                arm.Box(new Vector3(0,-.15f,0),new Vector3(morten ? .25f : .22f,.33f,.23f),upper);
+                arm.Box(new Vector3(0,-.41f,.05f),new Vector3(morten ? .21f : .18f,.3f,.19f),skin);
                 arm.Box(new Vector3(0,-.45f,.06f),new Vector3(.20f,.11f,.21f),accent*.65f);
                 if(morten)
                 {
